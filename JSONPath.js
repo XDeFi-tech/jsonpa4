@@ -1,0 +1,190 @@
+/**
+ *
+ * @param {String} contextChar
+ */
+function getContext(contextChar) {
+  if (contextChar.startsWith('$')) {
+    return contextChar.substring(1) || 'local'
+  }
+  if (contextChar === '&') {
+    return 'global'
+  }
+  return 'result'
+}
+
+/**
+ *
+ * @param {string} part
+ */
+function isRelativePart(part) {
+  return part[0] === '{' && part[part.length - 1] === '}'
+}
+
+/**
+ *
+ * @param {string} part
+ */
+function countOpen(part) {
+  return part.match(/\{/g)?.length ?? 0
+}
+
+/**
+ *
+ * @param {string} part
+ */
+function countClose(part) {
+  return part.match(/}/g)?.length ?? 0
+}
+
+class JSONPath {
+  /**
+   *
+   * @param {String} path
+   * @param {import("./Operation").Context} context
+   */
+  constructor(path, context) {
+    this.path = path
+    const [contextChar, ...restParts] = path.split('/')
+    this.context = getContext(contextChar)
+    this.parts = restParts
+      .reduce((result, part) => {
+        if (result.length === 0) {
+          return [part]
+        }
+
+        const prevPart = result[result.length - 1]
+
+        if (countOpen(prevPart) === countClose(prevPart)) {
+          return [...result, part]
+        }
+        result[result.length - 1] = prevPart + '/' + part
+
+        return result
+      }, [])
+      .map((part) => {
+        if (isRelativePart(part)) {
+          const relativePath = new JSONPath(
+            part.substring(1, part.length - 1),
+            context,
+          )
+
+          return relativePath.get(context[relativePath.context])
+        }
+
+        return part
+      })
+  }
+
+  isMainObjectPath() {
+    return this.parts.length === 1 && this.parts[0] === ''
+  }
+
+  /**
+   *
+   * @param {any} obj
+   * @returns
+   */
+  get(obj) {
+    if (this.isMainObjectPath()) return obj
+    return this.parts.reduce((result, part) => result[part], obj)
+  }
+
+  /**
+   *
+   * @param {any} obj
+   * @param {any} newValue
+   */
+  update(obj, newValue) {
+    if (this.isMainObjectPath()) return newValue
+    let temp = obj
+    for (let i = 0; i < this.parts.length; i++) {
+      const part = this.parts[i]
+
+      if (!temp[part]) {
+        if (Number.isNaN(parseInt(part, 10))) {
+          temp[part] = []
+        } else {
+          temp[part] = {}
+        }
+      }
+
+      if (i + 1 === this.parts.length) {
+        temp[part] = newValue
+        continue
+      }
+      temp = temp[part]
+    }
+    return obj
+  }
+
+  /**
+   *
+   * @param {any} obj
+   */
+  delete(obj) {
+    if (this.isMainObjectPath()) return undefined
+    let temp = obj
+    for (let i = 0; i < this.parts.length; i++) {
+      const prevPart = this.parts[i - 1]
+      const part = this.parts[i]
+
+      if (i + 1 === this.parts.length) {
+        if (Array.isArray(temp?.[prevPart])) {
+          temp[prevPart] = temp[prevPart].filter((_, i) => i !== part)
+          continue
+        }
+        delete temp[part]
+        continue
+      }
+
+      if (!temp[part]) {
+        return obj
+      }
+
+      temp = temp[part]
+    }
+
+    return obj
+  }
+
+  /**
+   *
+   * @param {any} obj
+   * @param {any} value
+   */
+  add(obj, value) {
+    if (this.isMainObjectPath()) {
+      if (Array.isArray(obj)) {
+        return obj.concat(value)
+      }
+      return obj ? obj + value : value
+    }
+
+    let temp = obj
+    for (let i = 0; i < this.parts.length; i++) {
+      const prevPart = this.parts[i - 1]
+      const part = this.parts[i]
+
+      if (i + 1 === this.parts.length) {
+        if (Array.isArray(temp?.[part])) {
+          temp[part].push(value)
+          continue
+        }
+        if (temp[part]) {
+          temp[part] += value
+          continue
+        }
+        temp[part] = value
+
+        continue
+      }
+      if (!temp[part]) {
+        return obj
+      }
+      temp = temp[part]
+    }
+    return obj
+  }
+}
+
+module.exports = JSONPath
