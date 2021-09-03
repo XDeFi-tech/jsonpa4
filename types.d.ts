@@ -1,6 +1,6 @@
 export default class JSONPatch {
   constructor(operation: PartialOperation[]) {}
-  public apply(obj: any, initialContext: Context, returnContext: string): any;
+  public apply(obj: any, initialContext?: Context, returnContext?: string): any;
 }
 
 interface Context {
