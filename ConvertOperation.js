@@ -8,12 +8,6 @@ const Operation = require('./Operation')
  */
 
 class ConvertOperation extends Operation {
-  static op = 'convert'
-  static converters = {
-    string: String,
-    number: Number,
-    bool: Boolean,
-  }
 
   /**
    *
@@ -24,19 +18,10 @@ class ConvertOperation extends Operation {
   constructor(args, patcher) {
     super({ op: ConvertOperation.op, ...args }, patcher)
     const { type } = args
+    // @ts-ignore
     this.converter = ConvertOperation.getConverter(type)
   }
 
-  /**
-   *
-   * @param {String} type
-   */
-  static getConverter(type) {
-    const typeConverter = this.converters[type]
-    if (!typeConverter) throw new Error(`Invalid type "${type}"`)
-
-    return typeConverter
-  }
 
   /**
    *
@@ -62,5 +47,21 @@ class ConvertOperation extends Operation {
     return newContext
   }
 }
+
+ConvertOpeartion.op = 'convert'
+
+ConvertOpeartion.converters = {
+  string: String,
+  number: Number,
+  bool: Boolean,
+}
+
+ConvertOpeartion.getConverter = function(type) {
+  const typeConverter = this.converters[type]
+  if (!typeConverter) throw new Error(`Invalid type "${type}"`)
+
+  return typeConverter
+}
+
 
 module.exports = ConvertOperation

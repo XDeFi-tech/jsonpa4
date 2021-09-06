@@ -8,7 +8,7 @@ const Operation = require('./Operation')
  */
 
 class ConcatOperation extends Operation {
-  static op = 'concat'
+  
 
   /**
    *
@@ -47,5 +47,5 @@ class ConcatOperation extends Operation {
     return newContext
   }
 }
-
+ConcatOperation.op = 'concat'
 module.exports = ConcatOperation

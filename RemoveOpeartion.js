@@ -7,8 +7,7 @@ const Operation = require('./Operation')
  */
 
 class RemoveOperation extends Operation {
-  static op = 'remove'
-
+  
   /**
    *
    * @param {RemoveArgs} args
@@ -39,5 +38,7 @@ class RemoveOperation extends Operation {
     return newContext
   }
 }
+
+RemoveOperation.op = 'remove'
 
 module.exports = RemoveOperation

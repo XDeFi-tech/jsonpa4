@@ -9,8 +9,6 @@ const RemoveOperation = require('./RemoveOpeartion')
  */
 
 class MoveOperation extends Operation {
-  static op = 'move'
-
   /**
    *
    * @param {MoveArgs} args
@@ -33,5 +31,7 @@ class MoveOperation extends Operation {
     return this.removeOpeartion.invoke(this.copyOpeartion.invoke(context))
   }
 }
+
+MoveOperation.op = 'move'
 
 module.exports = MoveOperation

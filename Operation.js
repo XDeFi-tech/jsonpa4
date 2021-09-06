@@ -5,7 +5,6 @@
  * @property {any} global
  */
 class Operation {
-  static op = ''
   /**
    *
    * @param {*} params
@@ -26,5 +25,7 @@ class Operation {
     return { global: {}, result: {} }
   }
 }
+
+Operation.op = ''
 
 module.exports = Operation

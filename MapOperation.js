@@ -10,8 +10,6 @@ const Operation = require('./Operation')
  */
 
 class MapOperation extends Operation {
-  static op = 'map'
-
   /**
    *
    * @param {MapArgs} args
@@ -62,5 +60,7 @@ class MapOperation extends Operation {
     return newContext
   }
 }
+
+MapOperation.op = 'map'
 
 module.exports = MapOperation

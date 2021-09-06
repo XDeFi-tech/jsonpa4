@@ -8,7 +8,6 @@ const Operation = require('./Operation')
  */
 
 class CallOperation extends Operation {
-    static op = 'call'
   
     /**
      *
@@ -19,7 +18,9 @@ class CallOperation extends Operation {
     constructor(args, patcher) {
       super({ op: CallOperation.op, ...args }, patcher)
       const { path, func } = args
+      // @ts-ignore
       this.path = new JSONPath(path)
+      // @ts-ignore
       this.callFunc = func()
     }
   
@@ -44,6 +45,8 @@ class CallOperation extends Operation {
       return newContext
     }
   }
+
+  CallOperation.op = 'call'
   
   module.exports = CallOperation
   

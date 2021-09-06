@@ -8,7 +8,6 @@ const Operation = require('./Operation')
  */
 
 class FlatOperation extends Operation {
-  static op = 'flat'
 
   /**
    *
@@ -45,6 +44,8 @@ class FlatOperation extends Operation {
     return newContext
   }
 }
+
+FlatOperation.op = 'flat'
 
 module.exports = FlatOperation
 

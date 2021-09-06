@@ -8,7 +8,6 @@ const Operation = require('./Operation')
  */
 
 class AddOperation extends Operation {
-  static op = 'add'
 
   /**
    *
@@ -42,5 +41,7 @@ class AddOperation extends Operation {
     return newContext
   }
 }
+
+AddOperation.op = 'add'
 
 module.exports = AddOperation

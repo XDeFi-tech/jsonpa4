@@ -8,7 +8,6 @@ const Operation = require('./Operation')
  */
 
 class CopyOperation extends Operation {
-  static op = 'copy'
 
   /**
    *
@@ -46,5 +45,7 @@ class CopyOperation extends Operation {
     return newContext
   }
 }
+
+CopyOperation.op = 'copy'
 
 module.exports = CopyOperation
