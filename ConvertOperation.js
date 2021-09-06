@@ -48,16 +48,18 @@ class ConvertOperation extends Operation {
   }
 }
 
-ConvertOpeartion.op = 'convert'
+ConvertOperation.op = 'convert'
 
-ConvertOpeartion.converters = {
+ConvertOperation.converters = {
   string: String,
   number: Number,
   bool: Boolean,
-  date: Date
+  date: function(value) {
+    return new Date(value)
+  }
 }
 
-ConvertOpeartion.getConverter = function(type) {
+ConvertOperation.getConverter = function(type) {
   const typeConverter = this.converters[type]
   if (!typeConverter) throw new Error(`Invalid type "${type}"`)
 
