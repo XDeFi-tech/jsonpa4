@@ -54,6 +54,7 @@ ConvertOpeartion.converters = {
   string: String,
   number: Number,
   bool: Boolean,
+  date: Date
 }
 
 ConvertOpeartion.getConverter = function(type) {
