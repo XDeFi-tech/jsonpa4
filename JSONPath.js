@@ -25,7 +25,7 @@ function isRelativePart(part) {
  * @param {string} part
  */
 function countOpen(part) {
-  return part.match(/\{/g)?.length ?? 0
+  return (part.match(/\{/g) || []).length
 }
 
 /**
@@ -33,7 +33,7 @@ function countOpen(part) {
  * @param {string} part
  */
 function countClose(part) {
-  return part.match(/}/g)?.length ?? 0
+  return (part.match(/}/g) || []).length
 }
 
 class JSONPath {
@@ -129,7 +129,7 @@ class JSONPath {
       const part = this.parts[i]
 
       if (i + 1 === this.parts.length) {
-        if (Array.isArray(temp?.[prevPart])) {
+        if (temp && Array.isArray(temp[prevPart])) {
           temp[prevPart] = temp[prevPart].filter((_, i) => i !== part)
           continue
         }
@@ -166,7 +166,7 @@ class JSONPath {
       const part = this.parts[i]
 
       if (i + 1 === this.parts.length) {
-        if (Array.isArray(temp?.[part])) {
+        if (temp && Array.isArray(temp[part])) {
           temp[part].push(value)
           continue
         }

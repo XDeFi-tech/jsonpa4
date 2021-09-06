@@ -18,7 +18,7 @@ class MapOperation extends Operation {
   constructor(args, patcher) {
     super({ op: MapOperation.op, ...args }, patcher)
     const { path, operations, localContext } = args
-    this.localContext = localContext ?? 'local'
+    this.localContext = localContext || 'local'
     this.mapPatcher = new this.patcher(operations)
   }
 
