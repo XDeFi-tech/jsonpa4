@@ -1,1 +1,1 @@
-module.exports = { default: require("./JSONPatch"), ...require("./util") };
+module.exports = { JSONPatch: require('./JSONPatch'), ...require('./util') }

@@ -1,21 +1,20 @@
-export default class JSONPatch {
+export class JSONPatch {
   constructor(operation: PartialOperation[]) {}
-  public apply(obj: any, initialContext?: Context, returnContext?: string): any;
+  public apply(obj: any, initialContext?: Context, returnContext?: string): any
 }
 
 interface Context {
-  local?: any;
-  result: any;
-  global: any;
+  local?: any
+  result: any
+  global: any
 }
 
 interface PartialOperation {
-  op: string;
-  [key: string]: any;
+  op: string
+  [key: string]: any
 }
 
-export const urlTransformator = (template: string, isMulti: boolean) => ({
-  addresses,
-}: {
-  addresses: string[];
-}) => string;
+export const urlTransformator =
+  (template: string, isMulti: boolean) =>
+  ({ addresses }: { addresses: string[] }) =>
+    string
