@@ -123,7 +123,7 @@ path - jsonpath like string
 
 type - new type of the path
 
-possible types: `'string', 'number', 'bool'`
+possible types: `'string', 'number', 'bool', 'date'`
 
 ### "copy"
 
@@ -148,6 +148,32 @@ path - jsonpath like string
 from - jsonpath like string
 
 Sets flattened array from "form" path to "path"
+
+### "multiply"
+
+```js
+{ op: 'multiply', path: '/a/b/c', from: '/c/b/a', byNumber: 123 }
+```
+
+path - jsonpath like string
+
+from - jsonpath like string
+
+byNumber - number
+
+multiplies value from 'from' and writes to 'path'
+
+### "sum"
+
+```js
+{ op: 'sum', path: '/a/b/c', from: '/c/b/a' }
+```
+
+path - jsonpath like string
+
+from - jsonpath like string
+
+adds value from 'from' to 'path' (use for numbers and string)
 
 ### "map"
 
