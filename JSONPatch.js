@@ -17,6 +17,7 @@ const ConcatOperation = require('./ConcatOperation')
 const CallOperation = require('./CallOperation')
 const MultiplyOperation = require('./MutiplyOperation')
 const SumOperation = require('./SumOperation')
+const FindOperation = require('./FindOperation')
 
 /**
  * @type {typeof Operation[]}
@@ -34,6 +35,7 @@ const allOperations = [
   ConcatOperation,
   MultiplyOperation,
   SumOperation,
+  FindOperation,
 ]
 
 class JSONPatch {
