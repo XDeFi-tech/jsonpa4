@@ -1,7 +1,6 @@
 const JSONPath = require('./JSONPath')
 const JSONPatchError = require('./JSONPatchError')
 const Operation = require('./Operation')
-const EqualsOperation = require('./EqualsOperation')
 const allConditions = require('./allConditions')
 
 /**
@@ -12,14 +11,14 @@ const allConditions = require('./allConditions')
  * @property {import('./JSONPatch').PartialOperation} condition
  */
 
-class FindOperation extends Operation {
+class FilterOperation extends Operation {
   /**
    *
    * @param {FindArgs} args
    * @param {typeof import('./JSONPatch')} patcher
    */
   constructor(args, patcher) {
-    super({ op: FindOperation.op, ...args }, patcher)
+    super({ op: FilterOperation.op, ...args }, patcher)
     /** @type {any} */ const { path, condition, localContext } = args
     this.localContext = localContext || 'local'
     const ConditionOperation = allConditions.find(
@@ -48,7 +47,7 @@ class FindOperation extends Operation {
 
     const newValue = this.path.update(
       context[pathContext],
-      array.find((element) =>
+      array.filter((element) =>
         this.condition.invoke({
           ...context,
           [this.localContext]: element,
@@ -65,6 +64,6 @@ class FindOperation extends Operation {
   }
 }
 
-FindOperation.op = 'find'
+FilterOperation.op = 'filter'
 
-module.exports = FindOperation
+module.exports = FilterOperation
