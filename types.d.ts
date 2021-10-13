@@ -18,3 +18,5 @@ export const urlTransformator =
   (template: string, isMulti: boolean) =>
   ({ addresses }: { addresses: string[] }) =>
     string
+
+export const jsonTransformator = <T = any>(template: string, data: any) => T
