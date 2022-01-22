@@ -1,5 +1,5 @@
-const JSONPath = require('./JSONPath')
-const Operation = require('./Operation')
+const JSONPath = require("./JSONPath");
+const Operation = require("./Operation");
 
 /**
  * @typedef ConvertArgs
@@ -8,7 +8,6 @@ const Operation = require('./Operation')
  */
 
 class ConvertOperation extends Operation {
-
   /**
    *
    * @param {ConvertArgs} args
@@ -16,12 +15,11 @@ class ConvertOperation extends Operation {
    *
    */
   constructor(args, patcher) {
-    super({ op: ConvertOperation.op, ...args }, patcher)
-    const { type } = args
+    super({ op: ConvertOperation.op, ...args }, patcher);
+    const { type } = args;
     // @ts-ignore
-    this.converter = ConvertOperation.getConverter(type)
+    this.converter = ConvertOperation.getConverter(type);
   }
-
 
   /**
    *
@@ -30,41 +28,43 @@ class ConvertOperation extends Operation {
    * @returns {import('./Operation').Context}
    */
   invoke(context) {
-    this.path = new JSONPath(this.arguments.path, context)
+    this.path = new JSONPath(this.arguments.path, context);
 
-    const { context: pathContext } = this.path
+    const { context: pathContext } = this.path;
 
     const newValue = this.path.update(
       context[pathContext],
-      this.converter(this.path.get(context[pathContext])),
-    )
+      this.converter(this.path.get(context[pathContext]))
+    );
 
     const newContext = {
       ...context,
       [pathContext]: newValue,
-    }
+    };
 
-    return newContext
+    return newContext;
   }
 }
 
-ConvertOperation.op = 'convert'
+ConvertOperation.op = "convert";
 
 ConvertOperation.converters = {
   string: String,
   number: Number,
   bool: Boolean,
-  date: function(value) {
-    return new Date(value)
-  }
-}
+  int: function (value) {
+    return parseInt(`${value}`);
+  },
+  date: function (value) {
+    return new Date(value);
+  },
+};
 
-ConvertOperation.getConverter = function(type) {
-  const typeConverter = this.converters[type]
-  if (!typeConverter) throw new Error(`Invalid type "${type}"`)
+ConvertOperation.getConverter = function (type) {
+  const typeConverter = this.converters[type];
+  if (!typeConverter) throw new Error(`Invalid type "${type}"`);
 
-  return typeConverter
-}
+  return typeConverter;
+};
 
-
-module.exports = ConvertOperation
+module.exports = ConvertOperation;
