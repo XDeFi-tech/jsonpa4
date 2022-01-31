@@ -55,6 +55,15 @@ ConvertOperation.converters = {
   int: function (value) {
     return parseInt(`${value}`);
   },
+  hex: function (value) {
+    return parseFloat(`${value}`, 16);
+  },
+  oct: function (value) {
+    return parseFloat(`${value}`, 8);
+  },
+  bin: function (value) {
+    return parseFloat(`${value}`, 2);
+  },
   date: function (value) {
     return new Date(value);
   },
