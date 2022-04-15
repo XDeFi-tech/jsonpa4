@@ -3,7 +3,7 @@
  * @param {string} key
  * @returns
  */
-const removeBrackets = (key) => key.substring(1, key.length - 1)
+const removeBrackets = (key) => key.substring(1, key.length - 1);
 
 /**
  *
@@ -13,20 +13,20 @@ const removeBrackets = (key) => key.substring(1, key.length - 1)
  */
 const urlTransformator =
   (template, isMulti) =>
-  ({ addresses }) =>
+  ({ addresses, ...rest }) =>
     isMulti
       ? [
           template.replace(
             /(\{[a-z_0-9]+\})/gi,
-            (key) => ({ addresses }[removeBrackets(key)]),
+            (key) => ({ addresses, ...rest }[removeBrackets(key)])
           ),
         ]
       : addresses.map((address) =>
           template.replace(
             /(\{[a-z_0-9\-]+\})/gi,
-            (key) => ({ addresses, address }[removeBrackets(key)]),
-          ),
-        )
+            (key) => ({ addresses, address, ...rest }[removeBrackets(key)])
+          )
+        );
 
 /**
  *
@@ -37,8 +37,8 @@ const urlTransformator =
 const jsonTransformator = (template, data) =>
   JSON.parse(
     template.replace(/(\{[a-z_0-9\-]+\})/gi, (key) =>
-      JSON.stringify(data[removeBrackets(key)]),
-    ),
-  )
+      JSON.stringify(data[removeBrackets(key)])
+    )
+  );
 
-module.exports = { urlTransformator, jsonTransformator }
+module.exports = { urlTransformator, jsonTransformator };
